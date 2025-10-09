@@ -9,7 +9,10 @@ class RegistrationForm(UserCreationForm):
         required=True, widget=forms.EmailInput(attrs={"class": "form-control"})
     )
     role = forms.ChoiceField(
-        choices=User.ROLE_CHOICES, widget=forms.Select(attrs={"class": "form-control"})
+        choices=[("", "Choose Role")]
+        + list(User.ROLE_CHOICES),  # Add default empty option
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,  # Ensures selection
     )
 
     class Meta:
@@ -34,6 +37,8 @@ class RegistrationForm(UserCreationForm):
         if password1 and password2:
             if password1 != password2:
                 raise forms.ValidationError("Passwords do not match.")
+            if password1.isdigit():
+                raise forms.ValidationError("This password is entirely numeric.")
             # Validate and raise only the FIRST error
             try:
                 validate_password(password1)
