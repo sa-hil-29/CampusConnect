@@ -38,10 +38,9 @@ class RegistrationForm(UserCreationForm):
             try:
                 validate_password(password1)
             except forms.ValidationError as e:
-                # e is a list of errors; take only the first one
-                raise forms.ValidationError(
-                    [e[0]]
-                )  # Shows only "too short" or first issue
+                # Convert to list and take first error
+                first_error = list(e)[0] if e else "Password validation failed."
+                raise forms.ValidationError(first_error)
         return password2
 
 
