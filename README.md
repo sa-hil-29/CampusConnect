@@ -38,3 +38,63 @@ Prerequisites
 
 Python 3.8+.
 Git.
+Project Structure
+campusconnect/
+├── manage.py
+├── requirements.txt
+├── db.sqlite3
+├── media/
+│   └── resumes/
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── templates/
+│   ├── base.html
+│   ├── accounts/
+│   │   ├── register.html
+│   │   └── login.html
+│   ├── profiles/
+│   │   └── update.html
+│   ├── jobs/
+│   │   ├── create.html
+│   │   └── list.html
+│   ├── applications/
+│   │   └── update.html
+│   └── dashboard/
+│       ├── index.html
+│       ├── applications.html
+│       └── analytics.html
+├── campusconnect/  # Main settings
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── accounts/  # User Management
+│   ├── models.py  # Custom User
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   └── migrations/
+├── profiles/  # Student Profile
+│   ├── models.py  # Student
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   └── migrations/
+├── jobs/  # Job Posting
+│   ├── models.py  # Job
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   └── migrations/
+├── applications/  # Application Management
+│   ├── models.py  # Application
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   └── migrations/
+└── dashboard/  # Admin Dashboard
+    ├── views.py
+    ├── urls.py
+    └── migrations/
