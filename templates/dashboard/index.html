@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CampusConnect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Admin Dashboard</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5>Total Applications</h5>
+                        <h2>{{ total_applications }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5>Open Jobs</h5>
+                        <h2>{{ open_jobs }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5>Selected Applications</h5>
+                        <h2>{{ selected_applications }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h5>Total Students</h5>
+                        <h2>{{ total_students }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'dashboard_applications' %}" class="btn btn-primary">View Applications</a>
+            <a href="{% url 'analytics' %}" class="btn btn-info">View Analytics</a>
+            <a href="{% url 'job_create' %}" class="btn btn-success">Post New Job</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

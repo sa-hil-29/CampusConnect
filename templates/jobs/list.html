@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Job List - CampusConnect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Job Listings</h2>
+        {% if jobs %}
+            <div class="row">
+                {% for job in jobs %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ job.title }}</h5>
+                                <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                                <p class="card-text"><strong>Company:</strong> {{ job.company_name }}</p>
+                                <p class="card-text"><strong>Eligibility:</strong> {{ job.eligibility_criteria|truncatewords:10 }}</p>
+                                <p class="card-text"><strong>Deadline:</strong> {{ job.deadline }}</p>
+                                {% if user.is_authenticated and user.role == 'student' %}
+                                    <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">Apply</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No jobs available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
