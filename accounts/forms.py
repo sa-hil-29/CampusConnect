@@ -6,7 +6,10 @@ from .models import User
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(
-        required=True, widget=forms.EmailInput(attrs={"class": "form-control"})
+        required=True,
+        widget=forms.EmailInput(
+            attrs={"class": "form-control", "placeholder": "Enter your email"}
+        ),
     )
     role = forms.ChoiceField(
         choices=[("", "Choose Role")] + list(User.ROLE_CHOICES),
@@ -18,7 +21,18 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2", "role")
         widgets = {
-            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "username": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter username"}
+            ),
+            "password1": forms.PasswordInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter password (min 8 chars)",
+                }
+            ),
+            "password2": forms.PasswordInput(
+                attrs={"class": "form-control", "placeholder": "Confirm password"}
+            ),
         }
 
     def save(self, commit=True):
@@ -37,7 +51,6 @@ class RegistrationForm(UserCreationForm):
             if password1 != password2:
                 raise forms.ValidationError("Passwords do not match.")
 
-            # Custom numeric check first
             if password1.isdigit():
                 raise forms.ValidationError("This password is entirely numeric.")
 
