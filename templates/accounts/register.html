@@ -27,6 +27,13 @@
             <div class="mb-3">
                 <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
                 {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.password2.errors|slice:":1" %}  <!-- Only first error -->
+                            <p class="text-danger mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
