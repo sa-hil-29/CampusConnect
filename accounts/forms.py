@@ -8,12 +8,21 @@ class RegistrationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "Enter your email"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter your email",
+                "autocomplete": "email",  # Autofill for email
+            }
         ),
     )
     role = forms.ChoiceField(
         choices=[("", "Choose Role")] + list(User.ROLE_CHOICES),
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.Select(
+            attrs={
+                "class": "form-control",
+                "autocomplete": "off",  # Disable autofill for role
+            }
+        ),
         required=True,
     )
 
@@ -22,16 +31,25 @@ class RegistrationForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2", "role")
         widgets = {
             "username": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter username"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter username",
+                    "autocomplete": "username",  # Autofill for username
+                }
             ),
             "password1": forms.PasswordInput(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Enter password (min 8 chars)",
+                    "autocomplete": "new-password",  # New password for registration
                 }
             ),
             "password2": forms.PasswordInput(
-                attrs={"class": "form-control", "placeholder": "Confirm password"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Confirm password",
+                    "autocomplete": "new-password",  # Matches password1
+                }
             ),
         }
 
@@ -65,11 +83,19 @@ class RegistrationForm(UserCreationForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "Enter email"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter email",
+                "autocomplete": "email",  # Autofill for email
+            }
         )
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Enter password"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter password",
+                "autocomplete": "current-password",  # Existing password for login
+            }
         )
     )
