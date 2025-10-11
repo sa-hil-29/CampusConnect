@@ -8,11 +8,21 @@ from .forms import RegistrationForm, LoginForm
 def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
+        print("Form errors:", form.errors)  # Debug (remove later)
         if form.is_valid():
             user = form.save()
-            username = form.cleaned_data.get("username")
-            messages.success(request, f"Account created for {username}!")
-            return redirect("user_login")
+            login(request, user)
+            role = form.cleaned_data["role"]
+            messages.success(request, f"Account created for {user.email}! Welcome!")
+            if role == "student":
+                return redirect("profile_update")
+            elif role == "admin":
+                return redirect("dashboard")
+            else:
+                return redirect("job_list")
+        else:
+            messages.error(request, "Registration failed. Please check errors.")
+            form = RegistrationForm()  # Reset to empty form on error
     else:
         form = RegistrationForm()
     return render(request, "accounts/register.html", {"form": form})
