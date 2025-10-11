@@ -43,7 +43,6 @@ def dashboard_applications(request):
 @login_required
 @user_passes_test(is_admin)
 def analytics(request):
-    # Example: Placements by branch (aggregate query)
     placement_data = (
         Student.objects.values("branch")
         .annotate(
@@ -54,9 +53,10 @@ def analytics(request):
         .order_by("-selected_count")
     )
 
-    # Prepare Chart.js data
     labels = [item["branch"] for item in placement_data]
     data = [item["selected_count"] for item in placement_data]
+
+    # Ensure valid JSON string (escape properly)
     chart_data = json.dumps(
         {
             "labels": labels,

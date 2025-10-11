@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Analytics - CampusConnect{% endblock %}
 
@@ -7,30 +8,11 @@
     <div class="col-12">
         <h2>Placement Analytics</h2>
         <canvas id="placementsChart" width="800" height="400"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            const ctx = document.getElementById('placementsChart').getContext('2d');
-            const chartData = {{ chart_data|safe }};
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                        label: 'Selected Placements by Branch',
-                        data: chartData.data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        </script>
-        <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <button id="export-chart" class="btn btn-secondary mt-3">Export Chart</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-3 ms-2">Back to Dashboard</a>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/analytics.js' %}"></script>
 {% endblock %}
