@@ -1,25 +1,10 @@
-# Django
 *.pyc
 __pycache__/
 db.sqlite3
 *.log
-
-# Environment & Secrets
-.env
 secretkey.txt
-secret_key.txt
-SECRET_KEY.txt
-*.txt
-
-# Media (uploads)
+.env
 media/
 staticfiles/
-
-# IDE
-.vscode/
-.idea/
-*.sublime-*
-
-# Virtual env
 venv/
 env/
