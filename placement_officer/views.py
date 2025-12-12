@@ -279,7 +279,7 @@ def generate_report(request):
 
     # Job Table
     story.append(Paragraph("Job-wise Summary", styles["Heading2"]))
-    table_data = [["Title", "Company", "CTC", "Applications", "Selected"]]
+    table_data = [["Title", "Company", "CTC", "Applicatio", "Selected"]]
     for j in job_stats:
         table_data.append(
             [
