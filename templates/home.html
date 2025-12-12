@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CampusConnect - Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="jumbotron bg-light p-5 rounded shadow">
+        <h1 class="display-4 text-primary">Welcome to CampusConnect</h1>
+        <p class="lead">Web-Based Placement Management System</p>
+        <hr class="my-4">
+        <p>Secure, Efficient, and User-Friendly Placement Portal</p>
+
+        {% if user.is_authenticated %}
+            <p class="mb-3">Hello, <strong>{{ user.name|default:user.email }}</strong> ({{ user.get_role_display }})</p>
+            {% if user.role == 'student' %}
+                <a href="{% url 'student:dashboard' %}" class="btn btn-success btn-lg">Go to Dashboard</a>
+            {% elif user.role == 'admin' %}
+                <a href="/officer/" class="btn btn-primary btn-lg">Officer Dashboard</a>
+            {% elif user.role == 'company' %}
+                <a href="{% url 'officer:job_list' %}" class="btn btn-info btn-lg">View Jobs</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'authentication:signup' %}" class="btn btn-success btn-lg mx-2">Sign Up</a>
+            <a href="{% url 'authentication:login' %}" class="btn btn-outline-primary btn-lg mx-2">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Students</h5>
+                    <p class="card-text">Update profile, apply to jobs, track applications.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Placement Officers</h5>
+                    <p class="card-text">Post jobs, manage applications, generate reports.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Companies</h5>
+                    <p class="card-text">View applicants, update job status.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

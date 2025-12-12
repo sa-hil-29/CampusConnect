@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Officer Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Officer Dashboard</h2>
+    <div>
+        <a href="{% url 'placement_officer:post_job' %}" class="btn btn-success me-2">
+            Post Job
+        </a>
+        <a href="{% url 'placement_officer:generate_report' %}" class="btn btn-primary">
+            Generate Report (PDF)
+        </a>
+    </div>
+</div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5>Total Jobs</h5>
+                    <h3>{{ total_jobs }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5>Total Applications</h5>
+                    <h3>{{ total_applications }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5>Selected</h5>
+                    <h3>{{ total_selections }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5>Placement Rate</h5>
+                    <h3>{{ selection_rate }}%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jobs Posted by You -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Jobs Posted by You</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Company</th>
+                            <th>CTC[LPA]</th>
+                            <th>Applications</th>
+                            <th>Deadline</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr>
+                            <td>{{ job.title }}</td>
+                            <td>{{ job.company_name }}</td>
+                            <td>Rs.{{ job.ctc }}</td>
+                            <td><span class="badge bg-primary">{{ job.application_set.count }}</span></td>
+                            <td>{{ job.deadline|date:"d M Y" }}</td>
+                            <td>
+                                <a href="{% url 'placement_officer:edit_job' job.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{% url 'placement_officer:delete_job' job.id %}" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Delete?')">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center">No jobs posted.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Recent Applications</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Student</th>
+                            <th>Job</th>
+                            <th>Resume</th>
+                            <th>Status</th>
+                            <th>Applied On</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                        <tr>
+                            <td>{{ app.student.user.get_full_name }} ({{ app.student.roll_number }})</td>
+                            <td>{{ app.job.title }}</td>
+                            <td>
+                                {% if app.student.resume %}
+                                    <a href="{% url 'placement_officer:view_resume' app.id %}" 
+                                        target="_blank" class="btn btn-sm btn-outline-info">
+                                        View Resume
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    {% if app.status == 'SELECTED' %}bg-success
+                                    {% elif app.status == 'REJECTED' %}bg-danger
+                                    {% elif app.status == 'SHORTLISTED' %}bg-warning
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ app.status }}
+                                </span>
+                            </td>
+                            <td>{{ app.applied_on|date:"d M Y" }}</td>
+                            <td>
+                                {% if not app.is_final %}
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'placement_officer:update_status' app.id 'SHORTLISTED' %}" 
+                                            class="btn btn-warning">Shortlist</a>
+                                        <a href="{% url 'placement_officer:update_status' app.id 'SELECTED' %}" 
+                                            class="btn btn-success">Select</a>
+                                        <a href="{% url 'placement_officer:update_status' app.id 'REJECTED' %}" 
+                                        class="btn btn-danger">Reject</a>
+                                    </div>
+                                {% else %}
+                                    <span class="text-success small fw-bold">FINAL</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="7" class="text-center">No applications.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+        <div class="card mb-4">
+        <div class="card-header">
+            <h5>Applications per Job</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="barChart" height="120"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('barChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: 'Applications',
+                data: {{ chart_data|safe }},
+                backgroundColor: {{ chart_colors|safe }},
+                borderColor: '#2c3e50',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Applications per Job' }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+        }
+    });
+</script>
+{% endblock %}

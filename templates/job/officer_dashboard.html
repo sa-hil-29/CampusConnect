@@ -1,0 +1,29 @@
+<!-- templates/job/officer_dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Officer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Placement Officer Dashboard</h2>
+    <a href="{% url 'officer:post_job' %}" class="btn btn-success mb-3">Post New Job</a>
+    
+    <h4>Posted Jobs</h4>
+    {% if jobs %}
+        <table class="table table-striped">
+            <thead><tr><th>Title</th><th>Company</th><th>Deadline</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.company_name }}</td>
+                    <td>{{ job.deadline }}</td>
+                    <td>{{ job.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No jobs posted yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Post Job{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3>Post New Job</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.title|as_crispy_field }}
+            {{ form.company_name|as_crispy_field }}
+            {{ form.ctc|as_crispy_field }}
+            {{ form.description|as_crispy_field }}
+            {{ form.min_cgpa|as_crispy_field }}
+            
+            <div class="form-group">
+                <label class="font-weight-bold">Eligible Branches *</label>
+                <div class="border p-3 rounded bg-light">
+                    {{ form.eligible_branches }}
+                </div>
+                <small class="form-text text-muted">Select one or more branches.</small>
+            </div>
+
+            {{ form.deadline|as_crispy_field }}
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">Post Job</button>
+                <a href="{% url 'placement_officer:dashboard' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

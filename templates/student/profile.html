@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3>Complete Your Profile</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.roll_number|as_crispy_field }}
+            {{ form.cgpa|as_crispy_field }}
+            
+            <div class="form-group">
+                {{ form.branch|as_crispy_field }}
+            </div>
+
+            {{ form.resume|as_crispy_field }}
+            {{ form.skills|as_crispy_field }}
+
+            <button type="submit" class="btn btn-success">Save Profile</button>
+            <a href="{% url 'student:dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

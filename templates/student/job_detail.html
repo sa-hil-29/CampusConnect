@@ -1,0 +1,34 @@
+<!-- templates/student/job_detail.html -->
+{% extends 'base.html' %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3>{{ job.title }} - {{ job.company_name }}</h3>
+    </div>
+    <div class="card-body">
+        <p><strong>CTC:</strong> ₹{{ job.ctc }} LPA</p>
+        <p><strong>Description:</strong><br>{{ job.description|linebreaks }}</p>
+        <p><strong>Minimum CGPA:</strong> {{ job.min_cgpa }}</p>
+        <p><strong>Eligible Branches:</strong>
+            {% for branch in job.eligible_branches.all %}
+                {{ branch.get_code_display }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                All Branches
+            {% endfor %}
+        </p>
+        <p><strong>Deadline:</strong> {{ job.deadline }}</p>
+
+        {% if eligible %}
+            {% if already_applied %}
+                <button class="btn btn-secondary" disabled>Already Applied</button>
+            {% else %}
+                <a href="{% url 'application:apply' job.id %}" class="btn btn-success">Apply Now</a>
+            {% endif %}
+        {% else %}
+            <button class="btn btn-danger" disabled>Not Eligible</button>
+        {% endif %}
+        <a href="{% url 'student:dashboard' %}" class="btn btn-outline-primary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
